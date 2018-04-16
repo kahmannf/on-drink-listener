@@ -1,0 +1,47 @@
+{% extends "maintenance.html" %}
+{% block content%}
+
+<div class="row">
+    <div class="column column-1">&nbsp;</div>
+    <div class="column column-1">
+        <h4>Set Content</h4>
+    </div>
+    <div class="column column-1">
+        <h4>Clear Content</h4>
+    </div>
+    <div class="column column-1">
+        <h4>Slot-ID</h4>
+    </div>
+    <div class="column column-1">
+        <h4>Beverage</h4>
+    </div>
+    <div class="column column-1">
+        <h4>Amount</h4>
+    </div>
+</div>
+
+{% for supply in data.supply %}
+<div class="row">
+    <div class="column column-1">&nbsp;</div>
+    <div class="column column-1">
+        <a class="link-button" href="{{'%s?slot=%s' % (url_for('view_blueprint.set_slot'), supply['slot'])}}">set</a>
+    </div>
+    <div class="column column-1">
+        <a class="link-button" href="{{'%s?slot=%s' % (url_for('view_blueprint.clear_slot'), supply['slot'])}}">clear</a>
+    </div>
+    <div class="column column-1">
+        {{supply['slot']}}
+        &nbsp;
+    </div>
+    <div class="column column-1">
+        {{supply['beverage']}}
+        &nbsp;
+    </div>
+    <div class="column column-1">
+        {{supply['amount']}}
+        &nbsp;
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

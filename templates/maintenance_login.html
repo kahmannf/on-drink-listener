@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+
+{% if error %}<div class="row column column-12 error"> {{ error }} </div>{% endif %}
+
+<form class="row" action"{{url_for('view_blueprint.maintenance')}}" method=POST>
+	<div class="column column-1">
+		&nbsp;
+	</div>
+	<div class="column column-1">
+		Pin:
+	</div>
+	<div class="column column-2">
+		<input type="password" name="pin">
+	</div>
+	<div class="column column-1">
+		<input class="link-button" type="submit" value="log in">
+	</div>
+</form>
+
+{% endblock %}

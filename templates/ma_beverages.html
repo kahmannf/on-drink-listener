@@ -1,0 +1,41 @@
+{% extends "maintenance.html" %}
+{% block content%}
+    <div class="row">
+        <div class="column column-1">&nbsp;</div>
+        <div class="column column-1">
+            <h4>Edit</h4>
+        </div>
+        <div class="column column-1">
+            <h4>Name</h4>
+        </div>
+        <div class="column column-1">
+            <h4>Viscosity</h4>
+        </div>
+        <div class="column column-2">
+            <h4>Alcohol (vol. percentage)</h4>
+        </div>
+        <div class="column column-1"><a class="link-button" href="{{url_for('view_blueprint.new_beverage')}}">New</a></div>
+    </div>
+    
+    {% for beverage in data.beverages %}
+    <div class="row">
+        <div class="column column-1">&nbsp;</div>
+        <div class="column column-1">
+            <a class="link-button" href="{{'%s?name=%s' % (url_for('view_blueprint.edit_beverage'), beverage['name'])}}">edit</a>
+        </div>
+        <div class="column column-1">
+            {{beverage['name']}}
+            &nbsp;
+        </div>
+        <div class="column column-1">
+            {{beverage['viscosity']}}
+            &nbsp;
+        </div>
+        <div class="column column-2">
+            {{beverage['alcohol_vol']}}
+            &nbsp;
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

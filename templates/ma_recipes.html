@@ -1,0 +1,34 @@
+{% extends "maintenance.html" %}
+{% block content%}
+    <div class="row">
+        <div class="column column-1">&nbsp;</div>
+        <div class="column column-1">
+            <h4>Edit</h4>
+        </div>
+        <div class="column column-1">
+            <h4>Image</h4>
+        </div>
+        <div class="column column-1">
+            <h4>Name</h4>
+        </div>
+        <div class="column column-1"><a class="link-button" href="{{url_for('view_blueprint.new_recipe')}}">New</a></div>
+    </div>
+    
+    {% for recipe in data.recipes %}
+    <div class="row">
+        <div class="column column-1">&nbsp;</div>
+        <div class="column column-1">
+            <a class="link-button" href="{{'%s?name=%s' % (url_for('view_blueprint.edit_recipe'), recipe['name'])}}">edit</a>
+        </div>
+        <div class="column column-1">
+            Implemt images...
+            &nbsp;
+        </div>
+        <div class="column column-1">
+            {{recipe['name']}}
+            &nbsp;
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

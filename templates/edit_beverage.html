@@ -1,0 +1,38 @@
+{% extends "maintenance.html" %}
+{% block content %}
+<form action="{{url_for('view_blueprint.edit_beverage')}}" method="POST">
+    {% if old_name %}
+        <input class="ninja" type="text" name="old_name" value="{{old_name}}">
+    {% endif %}
+        <div class="row">
+            <div class="column column-1">&nbsp;</div>
+            <div class="column column-1">Name:</div>
+            <div class="column column-3">
+                <input type="text" name="name" value="{{beverage.get('name', '')}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="column column-1">&nbsp;</div>
+            <div class="column column-1">Viscosity:</div>
+            <div class="column column-3">
+                <input type="number" name="viscosity" value="1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="column column-1">&nbsp;</div>
+            <div class="column column-1">Alcohol Vol. Percentage</div>
+            <div class="column column-3">
+                <input type="number" name="alcohol_vol" value="0">
+            </div>
+        </div>
+        <div class="row">
+            <div class="column column-2">&nbsp;</div>
+            <div class="column column-3">
+                <input class="link-button" type="submit" value="Save">
+            </div>
+        </div>
+        
+        
+        
+    </form>
+{% endblock %}

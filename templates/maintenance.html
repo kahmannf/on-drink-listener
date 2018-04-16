@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="column column-1">&nbsp;</div>
+    <div class="column column-1">
+        {% if session.get('logged_in', False) %}
+            <a class="link-button" href="{{url_for('view_blueprint.maintenance')}}">Supply</a>
+        {% else %}
+            &nbsp;
+        {% endif %}
+    </div>
+    <div class="column column-1">
+        {% if session.get('logged_in', False) %}
+            <a class="link-button" href="{{url_for('view_blueprint.ma_beverages')}}">Beverages</a>
+        {% else %}
+            &nbsp;
+        {% endif %}
+    </div>
+    <div class="column column-1">
+        {% if session.get('logged_in', False) %}
+            <a class="link-button" href="{{url_for('view_blueprint.ma_recipes')}}">Recipes</a>
+        {% else %}
+            &nbsp;
+        {% endif %}
+    </div>
+    <div class="column column-6">
+        &nbsp;</div>
+    <div class="column column-1">
+        <form action="{{url_for('view_blueprint.maintenance')}}" method='POST'>
+            <input class="link-button" type="submit" value="log off">
+        </form>
+    </div>
+</div>
+
+{% block content %}{% endblock %}
+
+{% endblock %}

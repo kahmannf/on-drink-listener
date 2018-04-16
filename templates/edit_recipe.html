@@ -1,0 +1,43 @@
+{% extends "maintenance.html" %}
+{% block content %}
+<form action="{{url_for('view_blueprint.edit_recipe')}}" id="form_recipe" method="POST">
+    {% if old_name %}
+        <input class="ninja" type="text" name="old_name" value="{{old_name}}">
+    {% endif %}
+        <div class="row">
+            <div class="column column-1">&nbsp;</div>
+            <div class="column column-1">Name:</div>
+            <div class="column column-3">
+                <input type="text" name="name" value="{{recipe.get('name', '')}}">
+            </div>
+        </div>
+        <input class="ninja" type="number" id="total_ingredients" name="total_ingredients" value="{{len(recipe.ingredients)}}">
+        {% for ingredient in recipe['ingredients']%}
+            <div class="row" id="ingredient{{recipe.ingredients.index(ingredient)}}">
+                <div class="column column-1">&nbsp;</div>
+                <div class="column column-2">
+                    <select id="beverages{{recipe.ingredients.index(ingredient)}}" form="form_recipe" name="beverage{{recipe.ingredients.index(ingredient)}}">
+                        {% for beverage in data.beverages %}
+                            <option value="{{beverage['name']}}" {% if ingredient['beverage'] == beverage['name'] %} selected="selected" {% endif %} >{{beverage['name']}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="column column-1">
+                    <input type="number" name="amount{{recipe.ingredients.index(ingredient)}}" id="amount{{recipe.ingredients.index(ingredient)}}" value="{{ingredient['amount']}}">
+                </div>
+                <div class="column column-1">
+                    <button type="button" class="link-button" id="remove_button{{recipe.ingredients.index(ingredient)}}" onclick="remove_recipe_row(this)">Remove</button>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="row" id="submit-row">
+            <div class="column column-2">&nbsp;</div>
+            <div class="column column-3">
+                <input class="link-button" type="submit" value="Save">
+            </div>
+        </div>
+        
+        
+        
+    </form>
+{% endblock %}
