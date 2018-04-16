@@ -1,0 +1,148 @@
+.error {
+    color: rgb(150, 24, 24);
+}
+
+.fix-height-element-30 {
+    height: 30px;
+    padding: auto 0;
+}
+
+.link-button {
+    background-color: rgb(175, 175, 175);
+    color: black;
+    border: 2px solid rgb(160, 159, 159) ;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.link-button:link, .link-button:visited {
+    background-color: rgb(175, 175, 175);
+    color: black;
+    border: 2px solid rgb(160, 159, 159) ;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.link-button:hover {
+	border-style: outset;
+    background-color: rgb(175, 175, 175);
+    color: white;
+}
+
+.link-button:active {
+	border-style: inset;
+    background-color: rgb(175, 175, 175);
+    color: white;
+}
+
+.main {
+    width: 80%;
+    margin: 0 10%;
+    background-color: white;
+    position: absolute;
+    height: 100%;
+    border: 1px solid #DDD;
+    box-shadow: 5px 5px 0px rgba(0,0,0, .2);
+}
+
+#nav-menu {
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+.ninja {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+}
+
+.recipe {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.recipe span {
+    color: rgb(102, 102, 102);
+    font-family: Arial, Helvetica, sans-serif
+}
+
+.view-title {
+    color: rgb(60, 60, 60);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 6em
+}
+
+.column {
+    float: left;
+}
+  
+.row {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 1);
+    margin: 0 auto;
+    padding: 10px 0;
+}
+  
+.row:after, .row:before {
+    content: " ";
+    display: table;
+}
+  
+.row:after {
+    clear: both;
+}
+  
+.column-12 {
+    width: 100%;
+}
+
+.column-11 {
+    width: 91.66%;
+}
+
+.column-10 {
+    width: 83.33%;
+}
+
+.column-9 {
+    width: 75%;
+}
+
+.column-8 {
+    width: 66.66%;
+}
+
+.column-7 {
+    width: 58.33%;
+}
+
+.column-6 {
+    width: 50%;
+}
+
+.column-5 {
+    width: 41.66%;
+}
+  
+.column-4 {
+    width: 33.33%;
+}
+  
+.column-3 {
+    width: 25%;
+}
+  
+.column-2 {
+    width: 16.66%;
+}
+  
+.column-1 {
+    width: 8.33%;
+}
+
+body {
+    background-color: rgb(185, 185, 185);
+}
