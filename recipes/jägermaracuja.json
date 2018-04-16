@@ -1,0 +1,13 @@
+{
+    "name": "J\u00e4ger Maracuja",
+    "ingredients": [
+        {
+            "beverage": "J\u00e4germeister",
+            "amount": 1
+        },
+        {
+            "beverage": "Maracujasaft",
+            "amount": 4
+        }
+    ]
+}

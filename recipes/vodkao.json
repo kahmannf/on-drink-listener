@@ -1,0 +1,13 @@
+{
+    "name": "Vodka O",
+    "ingredients": [
+        {
+            "beverage": "Vodka",
+            "amount": 1
+        },
+        {
+            "beverage": "Orangensaft",
+            "amount": 4
+        }
+    ]
+}
