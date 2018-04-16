@@ -78,6 +78,24 @@ class Data:
 
         save_to_file(filename, supply_item)
 
+    def clear_supply_item(self, slotid):
+        supply_item = None
+        
+        for sup in self.supply:
+            if sup['slot'] == slotid:
+                supply_item = sup
+
+        if supply_item:
+            supply_item['amount'] = 0
+            supply_item['beverage'] = ''
+            server_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+
+            supply_dir = os.path.join(server_dir, self.server_config['supply_dir'])
+
+            filename = os.path.join(supply_dir, 'slot%s.json' % str(supply_item['slot']))
+
+            save_to_file(filename, supply_item)
+
     def update_or_create_beverage(self, beverage, old_name):
         original_beverage = self.get_beverage(name=old_name)
 

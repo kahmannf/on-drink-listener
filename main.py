@@ -4,6 +4,8 @@ from configuration import get_config
 from data import Data
 from controller import Controller
 
+from blprt_view import view_blueprint
+
 app = Flask(__name__)
 
 server_config = get_config()
@@ -19,9 +21,9 @@ app.config.update(dict(
 
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
+app.register_blueprint(view_blueprint)
 
 def main():
-
     app.run(host=server_config['flask_host_name'],port=server_config['flask_port'])
 
 if __name__ == '__main__':
