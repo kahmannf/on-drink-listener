@@ -2,15 +2,15 @@ import json, os, inspect
 
 class Data:
 
-    application_name = ''
+    ##application_name = ''
 
     view_name = 'Cocktail Mixer!'
 
-    recipes = []
-    beverages = []
-    supply = []
+    ##recipes = []
+    ##beverages = []
+    ##supply = []
 
-    server_config = None
+    ##server_config = None
 
     def __init__(self, server_config):
         self.server_config = server_config

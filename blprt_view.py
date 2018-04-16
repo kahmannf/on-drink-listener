@@ -1,11 +1,14 @@
 from flask import Blueprint, render_template, abort, request, flash, redirect, session, url_for
 from configuration import get_config
 from data import Data
+from controller import Controller
 
 
 view_blueprint = Blueprint('view_blueprint', __name__, template_folder='templates')
 
 config = get_config()
+
+controller = Controller()
 
 @view_blueprint.route('/', methods=['GET'])
 def show_recipes():
@@ -311,3 +314,36 @@ def edit_recipe():
     else:
         data.view_name = 'Edit recipe: %s' % recipe['name']
         return render_template('edit_recipe.html', data=data, recipe=recipe, old_name=recipe_name, len=len)
+
+@view_blueprint.route('/mix/')
+def mix():
+    data = Data(server_config=config)
+    
+    error_messages = []
+    
+    recipe_name = request.args.get('name', '')
+
+    if not recipe_name or recipe_name == '':
+        error_messages.append('No recipe name in request url')
+
+    recipe = data.get_recipe(recipe_name)
+
+    if not recipe:
+        error_messages.append('No recipe with name "%s"' % recipe_name)
+
+    if recipe and not data.can_mix(recipe):
+        error_messages.append('Not enough ingredients for "%s"' % recipe_name)
+
+    if not controller.isAvailable:
+        error_messages.append('Already mixing Cocktail')
+
+    if len(error_messages) > 0:
+        for message in error_messages:
+            flash(message)
+    else:
+        controller.mix_cocktail(recipe)
+        flash('Mixing Cocktail "%s"' % recipe['name'])
+
+    return redirect(url_for('view_blueprint.show_recipes'))
+
+

@@ -31,6 +31,14 @@ if not len(argv) > 1 or not argv[1] == 'no_controller':
 
 
 class Controller:
-    def mix_cocktail(self, cocktailname):
+
+    def __init__(self):
+        self.isAvailable = True
+
+    def mix_cocktail(self, recipe):
+        if not self.isAvailable:
+            return
         pass
+
+    
         

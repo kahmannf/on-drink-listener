@@ -4,7 +4,11 @@
   {% for recipe in data.recipes %}
     <div class="row recipe">
         <div class="column column-1">&nbsp;</div>
-        <div class="column column-6">{{ recipe.get('name') }}</div>
+        <div class="column column-1">
+          <a class="link-button" href="{{'%s?name=%s' % (url_for('view_blueprint.mix'), recipe.get('name'))}}">MIX!</a>
+        </div>
+        <div class="column column-3">{{ recipe.get('name') }}</div>
+        
     </div>
   {% else %}
     <div class="row">
