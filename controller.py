@@ -76,8 +76,6 @@ def mix_task(controller, recipe, server_config):
     for slot, amount in supply_tasks.items():
         thread = Thread(target=pour_task, args=(controller, slot, float(amount) / total_parts, server_config), kwargs={})
         thread.start()
-
-    controller.isAvailable = True
     
 def ready_slot_task(controller, slotid):
     if isMockController:
