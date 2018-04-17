@@ -87,11 +87,7 @@ class Data:
         save_to_file(filename, supply_item)
 
     def clear_supply_item(self, slotid):
-        supply_item = None
-        
-        for sup in self.supply:
-            if sup['slot'] == slotid:
-                supply_item = sup
+        supply_item = self.get_supply_item_by_slot(slotid)
 
         if supply_item:
             supply_item['amount'] = 0
@@ -146,7 +142,11 @@ class Data:
     def remove_amount_by_slot(self, slotid, amount_ml):
         supply_item = self.get_supply_item_by_slot(slotid)
         supply_item['amount'] -= amount_ml
-        self.set_supply_item(supply_item)
+
+        if supply_item['amount'] <= 0:
+            self.clear_supply_item(supply_item['slot'])
+        else:
+            self.set_supply_item(supply_item)
 
         
 
