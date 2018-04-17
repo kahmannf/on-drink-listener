@@ -341,7 +341,7 @@ def mix():
         for message in error_messages:
             flash(message)
     else:
-        controller.mix_cocktail(recipe)
+        controller.mix_cocktail(recipe, config)
         flash('Mixing Cocktail "%s"' % recipe['name'])
 
     return redirect(url_for('view_blueprint.show_recipes'))
