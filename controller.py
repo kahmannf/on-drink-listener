@@ -126,6 +126,8 @@ class Controller:
     def complete_pourtask(self):
         self.remaining_operations = self.remaining_operations - 1
 
+        print('Completed pour_task. Remaining: %s', self.remaining_operations)
+
         if self.remaining_operations == 0:
             self.isAvailable = True
 
