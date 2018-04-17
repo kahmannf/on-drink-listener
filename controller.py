@@ -43,37 +43,39 @@ def pour_task(slotid, amount_ratio, server_config):
     ##pump ratio => 80 l/h
     ## => 80/60 l/min ~ 1,33 l/min
     ## => 80/ (60*60) l/s ~ 22,22 ml/s
+    ## => 80 / (60 * 60) * 1000 ml/s
+    ## => ml / (ml/s) = s
 
-    open_port(slotid)
+    seconds = amount / ((80 / (60*60)) * 1000)
 
-    seconds = amount / (80 / (60*60))
-    sleep(seconds)
-
-    close_port(slotid)
+    if isMockController:
+        print('Mock_controller: open %s for %s sec' % (slotid, seconds))
+    else:
+        open_port(slotid)
+        sleep(seconds)
+        close_port(slotid)
 
 def mix_task(controller, recipe, server_config):
     data = Data(server_config)
     
     asyncio.set_event_loop(Controller.event_loop)
 
-    if isMockController:
-        sleep(10)
-    else:
-        supply_tasks = {}
-        
-        for ingredient in recipe['ingredients']:
-            supply_item = data.get_supply_item(ingredient['beverage'])
-            if supply_item:
-                if not supply_item['slot'] in supply_tasks.keys():
-                    supply_tasks[supply_item['slot']] = ingredient['amount']
-                else:
-                    supply_tasks[supply_item['slot']] = supply_tasks[supply_item['slot']] + ingredient['amount']
-        
-        total_parts = float(sum(supply_tasks.values()))
+    
+    supply_tasks = {}
+    
+    for ingredient in recipe['ingredients']:
+        supply_item = data.get_supply_item(ingredient['beverage'])
+        if supply_item:
+            if not supply_item['slot'] in supply_tasks.keys():
+                supply_tasks[supply_item['slot']] = ingredient['amount']
+            else:
+                supply_tasks[supply_item['slot']] = supply_tasks[supply_item['slot']] + ingredient['amount']
+    
+    total_parts = float(sum(supply_tasks.values()))
 
-        future = [pour_task(slot, float(amount) / total_parts, server_config) for slot, amount in supply_tasks.items()]
-        
-        asyncio.get_event_loop().run_until_complete(asyncio.wait(future))
+    future = [pour_task(slot, float(amount) / total_parts, server_config) for slot, amount in supply_tasks.items()]
+    
+    asyncio.get_event_loop().run_until_complete(asyncio.wait(future))
 
     controller.isAvailable = True
     

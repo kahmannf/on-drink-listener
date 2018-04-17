@@ -307,7 +307,7 @@ def edit_recipe():
 
             if 'file' in request.files:
                 file = request.files['file']
-                if not file.filename == '':
+                if file and not file.filename == '' and allowed_file(file.filename):
                     
                     sec_filename = secure_filename(file.filename)
                     filename = sec_filename
