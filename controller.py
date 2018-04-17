@@ -34,13 +34,13 @@ if not len(argv) > 1 or not argv[1] == 'no_controller':
         writeNumber(port + 2)
         writeNumber(0)
 
-def pour_task(controller, slotid, amount_ratio, server_config):
+def pour_task(controller, slotid, amount_ml, server_config):
     
-    amount = amount_ratio * server_config['glass_size']
-    
-    seconds = amount / ((80 / (60*60)) * 1000)
-    
-    print('Slot: %s, Amount: %s ml, %s sec' % (slotid, amount, seconds))
+    data = Data(server_config)
+
+    seconds = amount_ml / ((80 / (60*60)) * 1000)
+
+    print('Slot: %s, Amount: %s ml, %s sec' % (slotid, amount_ml, seconds))
 
     ##pump ratio => 80 l/h
     ## => 80/60 l/min ~ 1,33 l/min
@@ -52,35 +52,51 @@ def pour_task(controller, slotid, amount_ratio, server_config):
     if isMockController:
         print('Mock_controller: open %s for %s sec' % (slotid, seconds))
     else:
+        data.remove_amount_by_slot(slotid, amount_ml)
         open_port(slotid)
         sleep(seconds)
         close_port(slotid)
 
+
     controller.complete_pourtask()
 
 def mix_task(controller, recipe, server_config):
-    data = Data(server_config)
     
     supply_tasks = {}
     
-    for ingredient in recipe['ingredients']:
-        supply_item = data.get_supply_item(ingredient['beverage'])
-        if supply_item:
-            if not supply_item['slot'] in supply_tasks.keys():
-                supply_tasks[supply_item['slot']] = ingredient['amount']
-            else:
-                supply_tasks[supply_item['slot']] = supply_tasks[supply_item['slot']] + ingredient['amount']
-    
-    total_parts = float(sum(supply_tasks.values()))
+    total_parts = sum(ingredient['amount'] for ingredient in recipe['ingredients'])
+
+
+    for ingredient in recipe['ingredients']:    
+        if not ingredient['beverage'] in supply_tasks.keys():
+            supply_tasks[ingredient['beverage']] = ingredient['amount']
+        else:
+            supply_tasks[ingredient['beverage']] = supply_tasks[ingredient['beverage']] + ingredient['amount']
 
     controller.remaining_operations = len(supply_tasks.keys())
-
-    for slot, amount in supply_tasks.items():
-        amount_parts = float(amount) / total_parts
-        data.remove_amount_by_slot(slot, amount_parts * server_config['glass_size'])
-        thread = Thread(target=pour_task, args=(controller, slot, amount_parts, server_config), kwargs={})
-        thread.start()
     
+    pour_tasks = {}
+
+    data = Data(server_config)
+
+    for beverage, amount in supply_tasks.items(): 
+        supply_items = sorted(data.get_supply_items(beverage), key= lambda d:d['amount'])
+
+        amount = (amount / total_parts) * server_config['glass_size']
+
+        for supply_item in supply_items:
+            if amount > 0:
+                if supply_item['amount'] >= amount:
+                    pour_tasks[supply_item['slot']] = amount
+                else:
+                    pour_tasks[supply_item['slot']] = supply_item['amount']
+                    amount -= supply_item['amount']
+
+    for slot, amount in pour_tasks.items():
+        thread = Thread(target=pour_task, args=(controller, slot, amount, server_config), kwargs={})
+        thread.start()
+
+
 def ready_slot_task(controller, slotid):
     if isMockController:
         print('open and close slot %s (mock)' % slotid)

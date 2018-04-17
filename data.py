@@ -19,11 +19,12 @@ class Data:
         self.supply = sorted(load_from_file(server_config['supply_dir']), key= lambda sup : sup.get('slot'))
         self.recipes = sorted(load_from_file(server_config['recipes_dir']), key= lambda rec : rec.get('name'))
         
-    def get_supply_item(self, name):
+    def get_supply_items(self, name):
+        items = []
         for supply_item in self.supply:
             if supply_item['beverage'].lower() == name.lower():
-                return supply_item
-        return None
+                items.append(supply_item)
+        return items
 
     def get_supply_item_by_slot(self, slot):
         for supply_item in self.supply:
@@ -51,10 +52,11 @@ class Data:
             total_parts += int(ingredient['amount'])
         
         for ingredient in recipe['ingredients']:
-            supply_item = self.get_supply_item(name=ingredient['beverage'])
-            if supply_item:
+            supply_items = self.get_supply_items(name=ingredient['beverage'])
+            if supply_items and len(supply_items) > 0:
+                total_amount = sum(sitem['amount'] for sitem in supply_items)
                 required_amount = float(totalML) * float(ingredient['amount']) / float(total_parts) 
-                if required_amount > int(supply_item['amount']):
+                if required_amount > total_amount:
                     return False
             else:
                 return False
@@ -140,11 +142,6 @@ class Data:
         filename = os.path.join(recipes_dir, '%s.json' % recipe['name'].replace(' ', '').lower())
 
         save_to_file(filename, recipe)
-
-    def remove_amount(self, beverage_name, amount_ml):
-        supply_item = self.get_supply_item(beverage_name)
-        supply_item['amount'] -= amount_ml
-        self.set_supply_item(supply_item)
 
     def remove_amount_by_slot(self, slotid, amount_ml):
         supply_item = self.get_supply_item_by_slot(slotid)
