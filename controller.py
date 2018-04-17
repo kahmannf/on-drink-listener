@@ -1,7 +1,7 @@
 from data import Data
 from sys import argv
 from threading import Thread
-import asyncio
+##import asyncio
 
 ##for testing purposes
 from time import sleep 
@@ -34,8 +34,7 @@ if not len(argv) > 1 or not argv[1] == 'no_controller':
         writeNumber(port + 2)
         writeNumber(0)
 
-@asyncio.coroutine
-def pour_task(slotid, amount_ratio, server_config):
+def pour_task(controller, slotid, amount_ratio, server_config):
     
     amount = amount_ratio * server_config['glass_size']
     print("Slot: %s, Amount: %s ml" % (slotid, amount))
@@ -58,9 +57,6 @@ def pour_task(slotid, amount_ratio, server_config):
 def mix_task(controller, recipe, server_config):
     data = Data(server_config)
     
-    asyncio.set_event_loop(Controller.event_loop)
-
-    
     supply_tasks = {}
     
     for ingredient in recipe['ingredients']:
@@ -73,9 +69,11 @@ def mix_task(controller, recipe, server_config):
     
     total_parts = float(sum(supply_tasks.values()))
 
-    future = [pour_task(slot, float(amount) / total_parts, server_config) for slot, amount in supply_tasks.items()]
-    
-    asyncio.get_event_loop().run_until_complete(asyncio.wait(future))
+    controller.remaining_operations = len(supply_tasks.keys())
+
+    for slot, amount in supply_tasks.items():
+        thread = Thread(target=pour_task, args=(controller, slot, float(amount) / total_parts, server_config), kwargs={})
+        thread.start()
 
     controller.isAvailable = True
     
@@ -97,11 +95,10 @@ def ready_slot_task(controller, slotid):
 
 class Controller:
 
-    event_loop = asyncio.new_event_loop()
-
     def __init__(self):
         self.isAvailable = True
         self.current_thread = None
+        self.remaining_operations = 0
 
     def mix_cocktail(self, recipe, server_config):
         data = Data(server_config)
@@ -126,6 +123,11 @@ class Controller:
                 self.current_thread.start()
                 return
     
+    def complete_pourtask(self):
+        self.remaining_operations = self.remaining_operations - 1
+
+        if self.remaining_operations == 0:
+            self.isAvailable = True
 
         
 
