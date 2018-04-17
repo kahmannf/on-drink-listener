@@ -23,6 +23,8 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 app.register_blueprint(view_blueprint)
 
+app.config['UPLOAD_FOLDER'] = '/static/images/'
+
 def main():
     app.run(host=server_config['flask_host_name'],port=server_config['flask_port'])
 

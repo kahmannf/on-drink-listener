@@ -1,0 +1,17 @@
+{
+    "name": "Tequila Sunrise",
+    "ingredients": [
+        {
+            "beverage": "Tequila",
+            "amount": 3
+        },
+        {
+            "beverage": "Orangensaft",
+            "amount": 18
+        },
+        {
+            "beverage": "Grenadine",
+            "amount": 9
+        }
+    ]
+}

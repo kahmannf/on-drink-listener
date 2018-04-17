@@ -21,8 +21,11 @@
             <a class="link-button" href="{{'%s?name=%s' % (url_for('view_blueprint.edit_recipe'), recipe['name'])}}">edit</a>
         </div>
         <div class="column column-1">
-            Implemt images...
-            &nbsp;
+            {% if 'image' in recipe.keys() %}
+                <img src="{{url_for('static', filename=recipe['image'])}}"></img>
+            {% else %}
+                no image... &nbsp;
+            {% endif %}
         </div>
         <div class="column column-1">
             {{recipe['name']}}

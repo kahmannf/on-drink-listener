@@ -2,13 +2,21 @@ from flask import Blueprint, render_template, abort, request, flash, redirect, s
 from configuration import get_config
 from data import Data
 from controller import Controller
+from werkzeug.utils import secure_filename
+import os
 
 
 view_blueprint = Blueprint('view_blueprint', __name__, template_folder='templates')
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 config = get_config()
 
 controller = Controller()
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @view_blueprint.route('/', methods=['GET'])
 def show_recipes():
@@ -295,11 +303,43 @@ def edit_recipe():
             for message in error_messages:
                 flash(message)
         else:
-            data.update_or_create_recipe({
-                'name': name,
-                'ingredients' : parsed_ingredients
-            }, old_name=old_name)
+            saved_filename = ''
 
+            if 'file' in request.files:
+                file = request.files['file']
+                if not file.filename == '':
+                    
+                    sec_filename = secure_filename(file.filename)
+                    filename = sec_filename
+                    filepath = os.path.join(config['upload_path'], filename)
+                    
+                    counter = 1
+
+                    while os.path.isfile(filepath):
+                        filename = '%s%s' % (counter, sec_filename)
+                        filepath = os.path.join(config['upload_path'], filename)
+                        counter = counter + 1
+                        
+
+                    file.save(filepath)
+                    saved_filename = filename 
+
+            old_recipe = data.get_beverage(old_name)
+
+            if saved_filename == '' and old_recipe and old_recipe['image']:
+                saved_filename = old_recipe['image']
+
+            if saved_filename == '':
+                data.update_or_create_recipe({
+                    'name': name,
+                    'ingredients' : parsed_ingredients
+                }, old_name=old_name)
+            else:
+                data.update_or_create_recipe({
+                    'name': name,
+                    'image' : saved_filename,
+                    'ingredients' : parsed_ingredients
+                }, old_name=old_name)
 
         return redirect(url_for('view_blueprint.ma_recipes'))
         
