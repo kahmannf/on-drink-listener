@@ -37,7 +37,10 @@ if not len(argv) > 1 or not argv[1] == 'no_controller':
 def pour_task(controller, slotid, amount_ratio, server_config):
     
     amount = amount_ratio * server_config['glass_size']
-    print("Slot: %s, Amount: %s ml" % (slotid, amount))
+    
+    seconds = amount / ((80 / (60*60)) * 1000)
+    
+    print('Slot: %s, Amount: %s ml, %s sec' % (slotid, amount, seconds))
 
     ##pump ratio => 80 l/h
     ## => 80/60 l/min ~ 1,33 l/min
@@ -45,7 +48,6 @@ def pour_task(controller, slotid, amount_ratio, server_config):
     ## => 80 / (60 * 60) * 1000 ml/s
     ## => ml / (ml/s) = s
 
-    seconds = amount / ((80 / (60*60)) * 1000)
 
     if isMockController:
         print('Mock_controller: open %s for %s sec' % (slotid, seconds))
