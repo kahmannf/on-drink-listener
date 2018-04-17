@@ -56,6 +56,8 @@ def pour_task(controller, slotid, amount_ratio, server_config):
         sleep(seconds)
         close_port(slotid)
 
+    controller.complete_pourtask()
+
 def mix_task(controller, recipe, server_config):
     data = Data(server_config)
     
