@@ -30,6 +30,9 @@
         <a class="link-button" href="{{'%s?slot=%s' % (url_for('view_blueprint.clear_slot'), supply['slot'])}}">clear</a>
     </div>
     <div class="column column-1">
+        <a class="link-button" href="{{'%s?slot=%s' % (url_for('view_blueprint.ready_slot'), supply['slot'])}}">ready</a>
+    </div>
+    <div class="column column-1">
         {{supply['slot']}}
         &nbsp;
     </div>

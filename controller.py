@@ -77,6 +77,20 @@ def mix_task(controller, recipe, server_config):
 
     controller.isAvailable = True
     
+def ready_slot_task(controller, slotid):
+    if isMockController:
+        print('open and close slot %s (mock)' % slotid)
+        return
+
+    print('Open port %s' % slotid)
+    open_port(slotid)
+    
+    sleep(1)
+
+    print('Close port %s' % slotid)
+    close_port(slotid)
+    
+    controller.isAvailable = True
 
 
 class Controller:
@@ -97,6 +111,18 @@ class Controller:
             self.current_thread = Thread(target=mix_task, args=(self, recipe, server_config), kwargs={})
             self.current_thread.start()
 
+    def ready_slot(self, slotid:int, server_config):
+        data = Data(server_config)
+        
+        if not self.isAvailable:
+            return
+
+        for slot in data.supply:
+            if slot['slot'] == slotid:
+                self.isAvailable = False
+                self.current_thread = Thread(target=ready_slot_task, args=(self, slotid), kwargs={})
+                self.current_thread.start()
+                return
     
 
         

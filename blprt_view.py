@@ -347,3 +347,15 @@ def mix():
     return redirect(url_for('view_blueprint.show_recipes'))
 
 
+@view_blueprint.route('/ready_slot/')
+def ready_slot():
+    slotid = int(request.args.get('slot', '-1'))
+
+    if slotid < 0:
+        flash('Invalid slotid')
+    elif not controller.isAvailable:
+        flash('Controller busy')
+    else:
+        controller.ready_slot(slotid, config)
+    
+    return redirect(url_for('view_blueprint.maintenance'))
