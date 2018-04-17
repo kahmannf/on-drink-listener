@@ -72,8 +72,6 @@ def mix_task(controller, recipe, server_config):
             supply_tasks[ingredient['beverage']] = ingredient['amount']
         else:
             supply_tasks[ingredient['beverage']] = supply_tasks[ingredient['beverage']] + ingredient['amount']
-
-    controller.remaining_operations = len(supply_tasks.keys())
     
     pour_tasks = {}
 
@@ -88,9 +86,12 @@ def mix_task(controller, recipe, server_config):
             if amount > 0:
                 if supply_item['amount'] >= amount:
                     pour_tasks[supply_item['slot']] = amount
+                    amount -= amount
                 else:
                     pour_tasks[supply_item['slot']] = supply_item['amount']
                     amount -= supply_item['amount']
+
+    controller.remaining_operations = len(pour_tasks.keys())
 
     for slot, amount in pour_tasks.items():
         thread = Thread(target=pour_task, args=(controller, slot, amount, server_config), kwargs={})
