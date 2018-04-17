@@ -76,7 +76,9 @@ def mix_task(controller, recipe, server_config):
     controller.remaining_operations = len(supply_tasks.keys())
 
     for slot, amount in supply_tasks.items():
-        thread = Thread(target=pour_task, args=(controller, slot, float(amount) / total_parts, server_config), kwargs={})
+        amount_parts = float(amount) / total_parts
+        data.remove_amount_by_slot(slot, amount_parts * server_config['glass_size'])
+        thread = Thread(target=pour_task, args=(controller, slot, amount_parts, server_config), kwargs={})
         thread.start()
     
 def ready_slot_task(controller, slotid):
@@ -128,7 +130,7 @@ class Controller:
     def complete_pourtask(self):
         self.remaining_operations = self.remaining_operations - 1
 
-        print('Completed pour_task. Remaining: %s', self.remaining_operations)
+        print('Completed pour_task. Remaining: %s' % self.remaining_operations)
 
         if self.remaining_operations == 0:
             self.isAvailable = True

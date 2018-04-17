@@ -25,6 +25,12 @@ class Data:
                 return supply_item
         return None
 
+    def get_supply_item_by_slot(self, slot):
+        for supply_item in self.supply:
+            if supply_item['slot'] == slot:
+                return supply_item
+        return None
+
     def get_beverage(self, name):
         for beverage in self.beverages:
             if beverage['name'].lower() == name.lower():
@@ -139,6 +145,13 @@ class Data:
         supply_item = self.get_supply_item(beverage_name)
         supply_item['amount'] -= amount_ml
         self.set_supply_item(supply_item)
+
+    def remove_amount_by_slot(self, slotid, amount_ml):
+        supply_item = self.get_supply_item_by_slot(slotid)
+        supply_item['amount'] -= amount_ml
+        self.set_supply_item(supply_item)
+
+        
 
 def get_file_names(directory):
     return [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
